@@ -20,6 +20,8 @@ export const Login = ({ navigation }) => {
                 alert("senha incorreta.");
             }else if (error.code == "auth/user-not-found") {
                 alert("Email não encontrado.");
+            }else if (error.code == "auth/invalid-email") {
+                alert("Email inválido.");
             }
         })
     }
