@@ -6,7 +6,6 @@ import { Register } from "../view/loginAndRegister/Register";
 import { Home } from "../view/home/Home";
 import { Search } from "../view/search/Search";
 import { Details } from "../view/details/Details";
-import { CardHome } from "../components/cardHome/cardHome";
 
 const Stack = createNativeStackNavigator();
 
@@ -17,16 +16,10 @@ export const Router = () => {
                 <Stack.Screen
                     name="Login"
                     component={Login}
-                    options={{
-                        headerShown: false,
-                    }}
                 />
                 <Stack.Screen
                     name="Register"
                     component={Register}
-                    options={{
-                        headerShown: false,
-                    }}
                 />
                 <Stack.Screen
                     name="Home"

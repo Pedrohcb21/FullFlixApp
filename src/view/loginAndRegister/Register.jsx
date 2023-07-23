@@ -2,34 +2,45 @@ import { SafeAreaView, Text, TextInput, StyleSheet, TouchableOpacity, Alert } fr
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../../api/auth";
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
-
+import { useState } from "react";
 
 export const Register = ({ navigation }) => {
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+    const [email, setEmail] = useState("");
+    const [password, setPass] = useState("");
 
     const onRegister = async() => {
         createUserWithEmailAndPassword(auth, email, password)
         .then((response)=>{
             Alert.alert("Cadastrado com sucesso!!")
             navigation.navigate("Login")
-        }).catch((err)=>{
-            console.error(err)
-        });
+        }).catch((error) => {
+            if (error.code == "auth/email-already-in-use") {
+                alert("O endereço de e-mail já está em uso.");
+            } else if (error.code == "auth/invalid-email") {
+                alert("O endereço de e-mail não é válido.");
+            } else if (error.code == "auth/operation-not-allowed") {
+                alert("Operação não permitida.");
+            } else if (error.code == "auth/weak-password") {
+                alert("A senha é muito fraca.");
+            }
+          });
     }
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
     return (
         <SafeAreaView style={styles.container}>
-            <TextInput style={styles.input} value={email} placeholder="Email"/>
-            <TextInput style={styles.input} value={password} placeholder="Senha"/>
+            <TextInput style={styles.input} value={email} placeholder="Email" onChangeText={(e) => setEmail(e)}/>
+            <TextInput style={styles.input} value={password} placeholder="Senha" onChangeText={(e) => setPass(e)}/>
 
             <TouchableOpacity style={styles.button} onPress={()=> onRegister()}>
                 <Text style={styles.text}>Cadastre-se</Text>
             </TouchableOpacity>
             
-            <TouchableOpacity>
-                <Text style={styles.register}>Faça o seu Login!</Text>
+            <TouchableOpacity onPress={()=>navigation.navigate("Login")}>
+                <Text style={styles.register}>Já possui uma conta? Faça o seu Login!</Text>
             </TouchableOpacity>
         </SafeAreaView>
     );
@@ -40,8 +51,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#000',
         alignItems: 'center',
-        justifyContent: 'center',
-        paddingHorizontal: '10', 
+        justifyContent: 'center', 
     },
     input: {
         color: '#fff',
@@ -60,6 +70,8 @@ const styles = StyleSheet.create({
         width: 150,
         height: 40,
         textAlign: 'center',
+        alignItems: 'center',
+        justifyContent: 'center',
         backgroundColor: 'red',
         marginTop: 6
     },

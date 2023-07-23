@@ -14,8 +14,13 @@ export const Login = ({ navigation }) => {
         .then((res)=>{
             Alert.alert("Login feito com sucesso");
             navigation.navigate("Home");
-        }).catch((err)=>{
-            console.log(err)
+        }).catch((error)=>{
+            console.log(error)
+            if (error.code == "auth/wrong-password") {
+                alert("senha incorreta.");
+            }else if (error.code == "auth/user-not-found") {
+                alert("Email não encontrado.");
+            }
         })
     }
 
@@ -24,8 +29,8 @@ export const Login = ({ navigation }) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <TextInput style={styles.input} placeholder="Email" onChangeText={(e) => setEmail(e)}/>
-            <TextInput style={styles.input} placeholder="Senha" onChangeText={(e) => setPass(e)}/>
+            <TextInput style={styles.input} value={email} placeholder="Email" onChangeText={(e) => setEmail(e)}/>
+            <TextInput style={styles.input} value={password} placeholder="Senha" onChangeText={(e) => setPass(e)}/>
             
             <TouchableOpacity style={styles.button} onPress={() => ToLogin()}>
                 <Text style={styles.text}>Login</Text>
@@ -43,8 +48,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#000',
         alignItems: 'center',
-        justifyContent: 'center',
-        paddingHorizontal: '10', 
+        justifyContent: 'center', 
     },
     input: {
         color: '#fff',
@@ -63,6 +67,8 @@ const styles = StyleSheet.create({
         width: 100,
         height: 40,
         textAlign: 'center',
+        alignItems: 'center',
+        justifyContent: 'center',
         backgroundColor: 'red',
         marginTop: 6
     },
